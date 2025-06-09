@@ -111,7 +111,8 @@ st.markdown("""
     }
     
     .products-table {
-        min-width: 800px; /* Minimum width to maintain table structure, enable scrolling */
+        display: grid; /* Use grid for flexible columns */
+        grid-template-columns: 3fr 1.5fr 1.2fr 1fr 1.5fr 1.2fr; /* Flexible columns for desktop */
         width: 100%;
         background: white;
         border-radius: 12px;
@@ -119,66 +120,79 @@ st.markdown("""
     }
     
     .table-header {
-        gap: 0.5rem;
+        display: contents; /* Make header cells directly participate in products-table grid */
+        /* Original styles for header cells are defined separately */
+    }
+    
+    .table-header-cell { /* New class for individual header cells */
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         font-weight: 600;
         padding: 1rem;
-        direction: rtl;
         text-align: center;
         position: sticky;
         top: 0;
         z-index: 10;
+        direction: rtl; /* Apply RTL here */
     }
     
     .table-row {
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid #f1f5f9;
-        transition: background-color 0.2s ease;
-        direction: rtl;
-        align-items: center;
-        min-height: 60px;
+        display: contents; /* Make row cells directly participate in products-table grid */
     }
     
-    .table-row:last-child {
-        border-bottom: none;
+    /* Individual cell styling for desktop table */
+    .product-name-cell,
+    .origin-cell,
+    .price-cell,
+    .qty-display-cell, /* New class for quantity display wrapper */
+    .control-buttons-cell, /* New class for control buttons wrapper */
+    .subtotal-cell {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex; /* Ensure content is centered/aligned */
+        align-items: center;
+        justify-content: center; /* Center content horizontally by default */
+        min-height: 60px;
+        word-wrap: break-word; /* Ensure text wraps */
+        direction: rtl; /* Apply RTL to cells */
     }
     
     .product-name-cell {
+        text-align: right; /* Align product name to the right */
+        justify-content: flex-end; /* Align content to the right for RTL */
         font-weight: 600;
-        color: #fffff;
-        font-size: 0.95rem;
-        text-align: right;
-        word-wrap: break-word;
-        line-height: 1.4;
+        color: #1e293b;
     }
     
     .origin-cell {
-        color: #fffff;
-        font-size: 0.9rem;
-        text-align: center;
+        color: #64748b;
     }
     
     .price-cell {
-        color: #2f855a;
-        font-weight: 600;
-        font-size: 0.95rem;
-        text-align: center;
+        color: #059669;
+        font-weight: 700;
     }
     
+    .qty-display-cell { /* Style for quantity display cell */
+        justify-content: center;
+    }
+
     .qty-display {
-        background: #ffffff;
-        border: 2px solid #3b82f6;
+        background: #f8fafc; /* Lighter background */
+        border: 1px solid #e2e8f0; /* Lighter border */
         border-radius: 6px;
         padding: 0.25rem;
         text-align: center;
         font-weight: 700;
-        color: #000000;
+        color: #1e293b;
         font-size: 0.9rem;
         min-width: 40px;
     }
     
+    .control-buttons-cell { /* Style for control buttons cell */
+        justify-content: center;
+    }
+
     .control-buttons {
         display: flex;
         gap: 0.25rem;
@@ -191,11 +205,11 @@ st.markdown("""
         color: white;
         border: none;
         border-radius: 4px;
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         cursor: pointer;
         font-weight: bold;
-        font-size: 0.8rem;
+        font-size: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -207,13 +221,21 @@ st.markdown("""
     }
     
     .subtotal-cell {
-        color: #c53030;
+        color: #dc2626;
         font-weight: 700;
-        font-size: 0.95rem;
-        text-align: center;
-        background: #fed7d7;
-        padding: 0.25rem;
-        border-radius: 4px;
+        background: #fef2f2;
+        padding: 0.5rem;
+        border-radius: 8px;
+        border: 2px solid #f87171;
+    }
+    
+    .table-row:last-child .product-name-cell,
+    .table-row:last-child .origin-cell,
+    .table-row:last-child .price-cell,
+    .table-row:last-child .qty-display-cell,
+    .table-row:last-child .control-buttons-cell,
+    .table-row:last-child .subtotal-cell {
+        border-bottom: none; /* Remove border for last row cells */
     }
     
     .summary-card {
@@ -303,27 +325,22 @@ st.markdown("""
         .mobile-table-container {
             margin: 0.5rem 0;
             border-radius: 8px;
-            overflow-x: auto; /* Ensure horizontal scroll remains */
+            overflow: visible; /* Remove horizontal scroll */
         }
         
         .products-table {
-            min-width: 800px; /* Keep minimum width for table structure */
-            display: table; /* Force table display */
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
+            min-width: unset; /* Remove minimum width constraint */
+            display: block; /* Switch from table to block layout */
         }
         
         /* Hide the table header on mobile */
         .table-header {
-            display: flex; /* Ensure table header is always displayed */
+            display: none;
         }
         
         /* Convert table rows to card layout */
         .table-row {
-            display: grid; /* Keep grid for consistent column alignment */
-            grid-template-columns: 3fr 1.5fr 1.2fr 1fr 1.5fr 1.2fr; /* Match header columns */
+            display: block;
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
@@ -331,186 +348,237 @@ st.markdown("""
             padding: 1rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             direction: rtl;
-            align-items: center;
-            min-height: 60px;
         }
-        
-        /* Product card styling */
-        .mobile-product-card {
-            display: contents; /* Make children direct grid items of .table-row */
-        }
-        
-        .mobile-product-header,
-        .mobile-product-details,
-        .mobile-price-section,
-        .mobile-quantity-section,
-        .mobile-subtotal-section {
-            display: contents; /* Make children direct grid items */
-        }
-        
-        .mobile-product-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 0.95rem;
-            text-align: right;
+
+        /* Product card styling specific to mobile */
+        /* These elements will be direct children of .table-row on mobile */
+        .product-name-cell,
+        .origin-cell,
+        .price-cell,
+        .qty-display-cell,
+        .control-buttons-cell,
+        .subtotal-cell {
+            padding: 0; /* Reset padding for mobile cards */
+            border-bottom: none; /* Reset border for mobile cards */
+            display: block; /* Stack elements */
+            min-height: unset; /* Reset min-height */
             word-wrap: break-word;
-            line-height: 1.4;
+            text-align: unset; /* Reset text alignment */
+            justify-content: unset; /* Reset justify-content */
+            align-items: unset; /* Reset align-items */
+            flex-direction: unset; /* Reset flex-direction */
+        }
+
+        .mobile-product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
         }
         
-        .mobile-product-origin {
+        .mobile-product-name { /* Using this to hold product name in mobile header */
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e293b;
+            flex: 1;
+            text-align: right;
+            line-height: 1.3;
+        }
+        
+        .mobile-product-origin { /* Using this to hold origin in mobile header */
+            background: #f8fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
             color: #64748b;
-            font-size: 0.9rem;
-            text-align: center;
-            background: none; /* Remove background */
-            padding: 0; /* Remove padding */
-            border-radius: 0; /* Remove border-radius */
-            border: none; /* Remove border */
-            margin-right: 0; /* Remove margin */
+            border: 1px solid #e2e8f0;
+            margin-right: 0.5rem;
         }
         
-        .mobile-price-label,
-        .mobile-quantity-label,
-        .mobile-subtotal-label {
-            display: none; /* Hide labels meant for mobile card view */
+        .mobile-product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .mobile-price-section {
+            text-align: center;
+        }
+        
+        .mobile-price-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
         }
         
         .mobile-price-value {
-            color: #2f855a;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 2px solid #10b981;
+        }
+        
+        .mobile-quantity-section {
             text-align: center;
-            background: none; /* Remove background */
-            padding: 0; /* Remove padding */
-            border-radius: 0; /* Remove border-radius */
-            border: none; /* Remove border */
+        }
+        
+        .mobile-quantity-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
         
         .mobile-quantity-controls {
             display: flex;
-            gap: 0.25rem;
             justify-content: center;
             align-items: center;
+            gap: 0.5rem;
         }
         
         .mobile-qty-btn {
             background: #3b82f6;
             color: white;
             border: none;
-            border-radius: 4px;
-            width: 24px;
-            height: 24px;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
-            box-shadow: none; /* Remove box-shadow */
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
         
         .mobile-qty-btn:hover {
             background: #2563eb;
-            transform: none; /* Remove transform */
-            box-shadow: none; /* Remove box-shadow */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
         }
         
         .mobile-qty-display {
             background: #ffffff;
             border: 2px solid #3b82f6;
-            border-radius: 6px;
-            padding: 0.25rem;
+            border-radius: 8px;
+            padding: 0.5rem;
             text-align: center;
             font-weight: 700;
-            color: #000000;
-            font-size: 0.9rem;
-            min-width: 40px;
-            box-shadow: none; /* Remove box-shadow */
+            color: #1e293b;
+            font-size: 1.1rem;
+            min-width: 50px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-subtotal-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .mobile-subtotal-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
         }
         
         .mobile-subtotal-value {
-            color: #c53030;
+            font-size: 1.2rem;
             font-weight: 700;
-            font-size: 0.95rem;
-            text-align: center;
-            background: #fed7d7;
-            padding: 0.25rem;
-            border-radius: 4px;
-            display: block; /* Ensure it takes full cell width */
-            min-width: unset; /* Remove min-width */
-            border: none; /* Remove border */
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 2px solid #f87171;
+            display: inline-block;
+            min-width: 100px;
         }
-
+        
         /* Category and sub-category separators remain the same */
         .category-separator {
-            margin: 20px 0;
-            height: 40px;
+            margin: 1.5rem 0;
+            height: 35px;
         }
         
         .sub-category-separator {
-            margin: 10px 0;
-            height: 15px;
+            margin: 1rem 0;
+            height: 12px;
         }
         
         /* Summary cards */
         .summary-card {
-            margin: 1rem 0;
-            padding: 1.5rem;
+            margin: 0.5rem 0;
+            padding: 1rem;
         }
         
         .summary-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
         
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
         
         .whatsapp-btn {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
         }
         
         /* Order details for mobile */
         .order-detail-row {
-            display: grid;
-            grid-template-columns: 3fr 1.5fr 1.2fr 1.2fr; /* Match main table columns for consistency */
+            display: block;
             background: white;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
             margin-bottom: 0.5rem;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            align-items: center;
-            min-height: 60px;
         }
         
         .order-detail-item {
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             color: #1e293b;
+            margin-bottom: 0.5rem;
             text-align: right;
-            border-bottom: none; /* Remove border */
-            padding-bottom: 0; /* Remove padding */
-            margin-bottom: 0; /* Remove margin */
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.5rem;
         }
         
         .mobile-order-details {
-            display: contents; /* Make children direct grid items */
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            text-align: center;
         }
         
         .mobile-order-detail-item {
-            display: contents; /* Make children direct grid items */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .mobile-order-detail-label {
-            display: none; /* Hide labels */
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
         }
         
         .mobile-order-detail-value {
             font-weight: 600;
             font-size: 0.9rem;
-            text-align: center;
         }
         
         .mobile-order-detail-qty {
@@ -535,30 +603,34 @@ st.markdown("""
         }
         
         .mobile-product-name {
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         
         .mobile-product-origin {
             font-size: 0.8rem;
+            padding: 0.2rem 0.4rem;
         }
         
         .mobile-price-value {
-            font-size: 0.9rem;
+            font-size: 1rem;
+            padding: 0.4rem;
         }
         
         .mobile-qty-btn {
-            width: 22px;
-            height: 22px;
-            font-size: 0.75rem;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
         }
         
         .mobile-qty-display {
-            font-size: 0.85rem;
-            min-width: 35px;
+            font-size: 1rem;
+            padding: 0.4rem;
+            min-width: 45px;
         }
         
         .mobile-subtotal-value {
-            font-size: 0.9rem;
+            font-size: 1.1rem;
+            padding: 0.4rem 0.8rem;
         }
         
         .summary-card {
@@ -575,15 +647,62 @@ st.markdown("""
         }
         
         .order-detail-row {
-            grid-template-columns: 2.5fr 1fr 1fr 1fr; /* Adjust for smaller screens */
+            display: block;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .order-detail-item {
-            font-size: 0.85rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            text-align: right;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+        }
+        
+        .mobile-order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            text-align: center;
+        }
+        
+        .mobile-order-detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .mobile-order-detail-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
         }
         
         .mobile-order-detail-value {
-            font-size: 0.8rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .mobile-order-detail-qty {
+            color: #1e293b;
+        }
+        
+        .mobile-order-detail-price {
+            color: #059669;
+        }
+        
+        .mobile-order-detail-subtotal {
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
         }
     }
 </style>
@@ -773,22 +892,17 @@ def display_products_table(grouped_products):
     st.markdown('<div class="mobile-table-container scroll-target">', unsafe_allow_html=True)
     st.markdown('<div class="products-table">', unsafe_allow_html=True)
     
-    # Table header using columns (hidden on mobile via CSS)
-    header_cols = st.columns([3, 1.5, 1.2, 1, 1.5, 1.2])
-    header_style = 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; text-align: center; font-weight: 600; border-radius: 8px; margin: 2px;'
-
-    with header_cols[0]:
-        st.markdown(f'<div class="table-header" style="{header_style}">البند</div>', unsafe_allow_html=True)
-    with header_cols[1]:
-        st.markdown(f'<div class="table-header" style="{header_style}">المنشأ</div>', unsafe_allow_html=True)
-    with header_cols[2]:
-        st.markdown(f'<div class="table-header" style="{header_style}">السعر</div>', unsafe_allow_html=True)
-    with header_cols[3]:
-        st.markdown(f'<div class="table-header" style="{header_style}">الكمية</div>', unsafe_allow_html=True)
-    with header_cols[4]:
-        st.markdown(f'<div class="table-header" style="{header_style}">التحكم</div>', unsafe_allow_html=True)
-    with header_cols[5]:
-        st.markdown(f'<div class="table-header" style="{header_style}">الإجمالي</div>', unsafe_allow_html=True)
+    # Table header using div elements with CSS Grid
+    st.markdown('''
+    <div class="table-header">
+        <div class="table-header-cell">البند</div>
+        <div class="table-header-cell">المنشأ</div>
+        <div class="table-header-cell">السعر</div>
+        <div class="table-header-cell">الكمية</div>
+        <div class="table-header-cell">التحكم</div>
+        <div class="table-header-cell">الإجمالي</div>
+    </div>
+    ''', unsafe_allow_html=True)
     
     # Display each item (product or separator)
     for i, item in enumerate(grouped_products):
@@ -816,19 +930,21 @@ def display_products_table(grouped_products):
             if product_name in st.session_state.cart:
                 st.session_state.cart[product_name]['price'] = price
             
-            # Create table row using Streamlit columns
-            row_cols = st.columns([3, 1.5, 1.2, 1, 1.5, 1.2])
+            # Create table row using div elements with CSS Grid
+            st.markdown(f'''
+            <div class="table-row">
+                <div class="product-name-cell">{product_name}</div>
+                <div class="origin-cell">{origin}</div>
+                <div class="price-cell">{price} ج.م</div>
+                <div class="qty-display-cell">
+                    <div class="qty-display">{current_qty}</div>
+                </div>
+                <div class="control-buttons-cell">
+            ''', unsafe_allow_html=True)
             
-            with row_cols[0]:
-                st.markdown(f'<div class="product-name-cell">{product_name}</div>', unsafe_allow_html=True)
-            with row_cols[1]:
-                st.markdown(f'<div class="origin-cell">{origin}</div>', unsafe_allow_html=True)
-            with row_cols[2]:
-                st.markdown(f'<div class="price-cell">{price} ج.م</div>', unsafe_allow_html=True)
-            with row_cols[3]:
-                st.markdown(f'<div class="qty-display">{current_qty}</div>', unsafe_allow_html=True)
-            with row_cols[4]:
-                # Control buttons for quantity
+            # Create control buttons using Streamlit columns within the control-buttons-cell div
+            btn_cols_container = st.container()
+            with btn_cols_container:
                 btn_cols = st.columns([1, 1])
                 with btn_cols[0]:
                     if st.button("➖", key=f"minus_{unique_key_base}", help="تقليل الكمية", use_container_width=True):
@@ -840,9 +956,14 @@ def display_products_table(grouped_products):
                             st.session_state.cart[product_name] = {'quantity': 0, 'price': price}
                         update_quantity(product_name, 1)
                         st.rerun()
-            with row_cols[5]:
-                subtotal_display = f"{subtotal} ج.م" if subtotal > 0 else "0 ج.م"
-                st.markdown(f'<div class="subtotal-cell">{subtotal_display}</div>', unsafe_allow_html=True)
+            
+            # Close the control-buttons-cell div and add subtotal
+            subtotal_display = f"{subtotal} ج.م" if subtotal > 0 else "0 ج.م"
+            st.markdown(f'''
+                </div>
+                <div class="subtotal-cell">{subtotal_display}</div>
+            </div>
+            ''', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
