@@ -1,5 +1,5 @@
 streamlit
 pandas
-gspread 
+gspread
 google-auth
 streamlit-extras
