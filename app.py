@@ -303,22 +303,27 @@ st.markdown("""
         .mobile-table-container {
             margin: 0.5rem 0;
             border-radius: 8px;
-            overflow: visible; /* Remove horizontal scroll */
+            overflow-x: auto; /* Ensure horizontal scroll remains */
         }
         
         .products-table {
-            min-width: unset; /* Remove minimum width constraint */
-            display: block; /* Switch from table to block layout */
+            min-width: 800px; /* Keep minimum width for table structure */
+            display: table; /* Force table display */
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
         }
         
         /* Hide the table header on mobile */
         .table-header {
-            display: none;
+            display: flex; /* Ensure table header is always displayed */
         }
         
         /* Convert table rows to card layout */
         .table-row {
-            display: block;
+            display: grid; /* Keep grid for consistent column alignment */
+            grid-template-columns: 3fr 1.5fr 1.2fr 1fr 1.5fr 1.2fr; /* Match header columns */
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
@@ -326,226 +331,186 @@ st.markdown("""
             padding: 1rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             direction: rtl;
+            align-items: center;
+            min-height: 60px;
         }
         
         /* Product card styling */
         .mobile-product-card {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            width: 100%;
+            display: contents; /* Make children direct grid items of .table-row */
         }
         
-        .mobile-product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 0.5rem;
-            margin-bottom: 0.5rem;
+        .mobile-product-header,
+        .mobile-product-details,
+        .mobile-price-section,
+        .mobile-quantity-section,
+        .mobile-subtotal-section {
+            display: contents; /* Make children direct grid items */
         }
         
         .mobile-product-name {
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 600;
             color: #1e293b;
-            flex: 1;
+            font-size: 0.95rem;
             text-align: right;
-            line-height: 1.3;
+            word-wrap: break-word;
+            line-height: 1.4;
         }
         
         .mobile-product-origin {
-            background: #f8fafc;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
             color: #64748b;
-            border: 1px solid #e2e8f0;
-            margin-right: 0.5rem;
-        }
-        
-        .mobile-product-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            align-items: center;
-        }
-        
-        .mobile-price-section {
+            font-size: 0.9rem;
             text-align: center;
+            background: none; /* Remove background */
+            padding: 0; /* Remove padding */
+            border-radius: 0; /* Remove border-radius */
+            border: none; /* Remove border */
+            margin-right: 0; /* Remove margin */
         }
         
-        .mobile-price-label {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
+        .mobile-price-label,
+        .mobile-quantity-label,
+        .mobile-subtotal-label {
+            display: none; /* Hide labels meant for mobile card view */
         }
         
         .mobile-price-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #059669;
-            background: #ecfdf5;
-            padding: 0.5rem;
-            border-radius: 8px;
-            border: 2px solid #10b981;
-        }
-        
-        .mobile-quantity-section {
+            color: #2f855a;
+            font-weight: 600;
+            font-size: 0.95rem;
             text-align: center;
-        }
-        
-        .mobile-quantity-label {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            background: none; /* Remove background */
+            padding: 0; /* Remove padding */
+            border-radius: 0; /* Remove border-radius */
+            border: none; /* Remove border */
         }
         
         .mobile-quantity-controls {
             display: flex;
+            gap: 0.25rem;
             justify-content: center;
             align-items: center;
-            gap: 0.5rem;
         }
         
         .mobile-qty-btn {
             background: #3b82f6;
             color: white;
             border: none;
-            border-radius: 8px;
-            width: 36px;
-            height: 36px;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+            transition: background-color 0.2s;
+            box-shadow: none; /* Remove box-shadow */
         }
         
         .mobile-qty-btn:hover {
             background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+            transform: none; /* Remove transform */
+            box-shadow: none; /* Remove box-shadow */
         }
         
         .mobile-qty-display {
             background: #ffffff;
             border: 2px solid #3b82f6;
-            border-radius: 8px;
-            padding: 0.5rem;
+            border-radius: 6px;
+            padding: 0.25rem;
             text-align: center;
             font-weight: 700;
-            color: #1e293b;
-            font-size: 1.1rem;
-            min-width: 50px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .mobile-subtotal-section {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-top: 0.5rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid #f1f5f9;
-        }
-        
-        .mobile-subtotal-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
+            color: #000000;
+            font-size: 0.9rem;
+            min-width: 40px;
+            box-shadow: none; /* Remove box-shadow */
         }
         
         .mobile-subtotal-value {
-            font-size: 1.2rem;
+            color: #c53030;
             font-weight: 700;
-            color: #dc2626;
-            background: #fef2f2;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 2px solid #f87171;
-            display: inline-block;
-            min-width: 100px;
+            font-size: 0.95rem;
+            text-align: center;
+            background: #fed7d7;
+            padding: 0.25rem;
+            border-radius: 4px;
+            display: block; /* Ensure it takes full cell width */
+            min-width: unset; /* Remove min-width */
+            border: none; /* Remove border */
         }
-        
+
         /* Category and sub-category separators remain the same */
         .category-separator {
-            margin: 1.5rem 0;
-            height: 35px;
+            margin: 20px 0;
+            height: 40px;
         }
         
         .sub-category-separator {
-            margin: 1rem 0;
-            height: 12px;
+            margin: 10px 0;
+            height: 15px;
         }
         
         /* Summary cards */
         .summary-card {
-            margin: 0.5rem 0;
-            padding: 1rem;
+            margin: 1rem 0;
+            padding: 1.5rem;
         }
         
         .summary-title {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
         
         .stat-number {
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
         
         .whatsapp-btn {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
         }
         
         /* Order details for mobile */
         .order-detail-row {
-            display: block;
+            display: grid;
+            grid-template-columns: 3fr 1.5fr 1.2fr 1.2fr; /* Match main table columns for consistency */
             background: white;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             margin-bottom: 0.5rem;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            align-items: center;
+            min-height: 60px;
         }
         
         .order-detail-item {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: #1e293b;
-            margin-bottom: 0.5rem;
             text-align: right;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 0.5rem;
+            border-bottom: none; /* Remove border */
+            padding-bottom: 0; /* Remove padding */
+            margin-bottom: 0; /* Remove margin */
         }
         
         .mobile-order-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 0.5rem;
-            text-align: center;
+            display: contents; /* Make children direct grid items */
         }
         
         .mobile-order-detail-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: contents; /* Make children direct grid items */
         }
         
         .mobile-order-detail-label {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-bottom: 0.25rem;
+            display: none; /* Hide labels */
         }
         
         .mobile-order-detail-value {
             font-weight: 600;
             font-size: 0.9rem;
+            text-align: center;
         }
         
         .mobile-order-detail-qty {
@@ -570,34 +535,30 @@ st.markdown("""
         }
         
         .mobile-product-name {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .mobile-product-origin {
             font-size: 0.8rem;
-            padding: 0.2rem 0.4rem;
         }
         
         .mobile-price-value {
-            font-size: 1rem;
-            padding: 0.4rem;
+            font-size: 0.9rem;
         }
         
         .mobile-qty-btn {
-            width: 32px;
-            height: 32px;
-            font-size: 1rem;
+            width: 22px;
+            height: 22px;
+            font-size: 0.75rem;
         }
         
         .mobile-qty-display {
-            font-size: 1rem;
-            padding: 0.4rem;
-            min-width: 45px;
+            font-size: 0.85rem;
+            min-width: 35px;
         }
         
         .mobile-subtotal-value {
-            font-size: 1.1rem;
-            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
         }
         
         .summary-card {
@@ -611,6 +572,18 @@ st.markdown("""
         .whatsapp-btn {
             padding: 0.7rem 1rem;
             font-size: 0.9rem;
+        }
+        
+        .order-detail-row {
+            grid-template-columns: 2.5fr 1fr 1fr 1fr; /* Adjust for smaller screens */
+        }
+        
+        .order-detail-item {
+            font-size: 0.85rem;
+        }
+        
+        .mobile-order-detail-value {
+            font-size: 0.8rem;
         }
     }
 </style>
@@ -843,54 +816,33 @@ def display_products_table(grouped_products):
             if product_name in st.session_state.cart:
                 st.session_state.cart[product_name]['price'] = price
             
-            # Create mobile card layout
-            st.markdown(f'''
-            <div class="table-row">
-                <div class="mobile-product-card">
-                    <div class="mobile-product-header">
-                        <div class="mobile-product-name">{product_name}</div>
-                        <div class="mobile-product-origin">{origin}</div>
-                    </div>
-                    <div class="mobile-product-details">
-                        <div class="mobile-price-section">
-                            <div class="mobile-price-label">السعر</div>
-                            <div class="mobile-price-value">{price} ج.م</div>
-                        </div>
-                        <div class="mobile-quantity-section">
-                            <div class="mobile-quantity-label">الكمية والتحكم</div>
-                            <div class="mobile-quantity-controls">
-            ''', unsafe_allow_html=True)
+            # Create table row using Streamlit columns
+            row_cols = st.columns([3, 1.5, 1.2, 1, 1.5, 1.2])
             
-            # Create control buttons using Streamlit columns within the card
-            btn_container = st.container()
-            with btn_container:
-                btn_cols = st.columns([1, 2, 1])
+            with row_cols[0]:
+                st.markdown(f'<div class="product-name-cell">{product_name}</div>', unsafe_allow_html=True)
+            with row_cols[1]:
+                st.markdown(f'<div class="origin-cell">{origin}</div>', unsafe_allow_html=True)
+            with row_cols[2]:
+                st.markdown(f'<div class="price-cell">{price} ج.م</div>', unsafe_allow_html=True)
+            with row_cols[3]:
+                st.markdown(f'<div class="qty-display">{current_qty}</div>', unsafe_allow_html=True)
+            with row_cols[4]:
+                # Control buttons for quantity
+                btn_cols = st.columns([1, 1])
                 with btn_cols[0]:
                     if st.button("➖", key=f"minus_{unique_key_base}", help="تقليل الكمية", use_container_width=True):
                         update_quantity(product_name, -1)
                         st.rerun()
                 with btn_cols[1]:
-                    st.markdown(f'<div class="mobile-qty-display">{current_qty}</div>', unsafe_allow_html=True)
-                with btn_cols[2]:
                     if st.button("➕", key=f"plus_{unique_key_base}", help="زيادة الكمية", use_container_width=True):
                         if product_name not in st.session_state.cart:
                             st.session_state.cart[product_name] = {'quantity': 0, 'price': price}
                         update_quantity(product_name, 1)
                         st.rerun()
-            
-            # Close the mobile card and add subtotal
-            subtotal_display = f"{subtotal} ج.م" if subtotal > 0 else "0 ج.م"
-            st.markdown(f'''
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mobile-subtotal-section">
-                        <div class="mobile-subtotal-label">الإجمالي الجزئي</div>
-                        <div class="mobile-subtotal-value">{subtotal_display}</div>
-                    </div>
-                </div>
-            </div>
-            ''', unsafe_allow_html=True)
+            with row_cols[5]:
+                subtotal_display = f"{subtotal} ج.م" if subtotal > 0 else "0 ج.م"
+                st.markdown(f'<div class="subtotal-cell">{subtotal_display}</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -904,11 +856,11 @@ def display_order_details():
     
     # Header row (hidden on mobile via CSS)
     st.markdown("""
-    <div class="order-detail-row" style="background: #f7fafc; font-weight: 700; display: none;">
-        <div>المنتج</div>
-        <div>الكمية</div>
-        <div>السعر</div>
-        <div>الإجمالي</div>
+    <div class="table-header" style="background: #f7fafc; font-weight: 700;">
+        <div class="table-header" style="text-align: right;">المنتج</div>
+        <div class="table-header">الكمية</div>
+        <div class="table-header">السعر</div>
+        <div class="table-header">الإجمالي</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -918,26 +870,16 @@ def display_order_details():
         price = details['price']
         subtotal = qty * price
         
-        # Desktop version (table row)
-        st.markdown(f'''
-        <div class="order-detail-row">
-            <div class="order-detail-item">{product_name}</div>
-            <div class="mobile-order-details">
-                <div class="mobile-order-detail-item">
-                    <div class="mobile-order-detail-label">الكمية</div>
-                    <div class="mobile-order-detail-value mobile-order-detail-qty">{qty} قطعة</div>
-                </div>
-                <div class="mobile-order-detail-item">
-                    <div class="mobile-order-detail-label">السعر</div>
-                    <div class="mobile-order-detail-value mobile-order-detail-price">{price} ج.م</div>
-                </div>
-                <div class="mobile-order-detail-item">
-                    <div class="mobile-order-detail-label">الإجمالي</div>
-                    <div class="mobile-order-detail-value mobile-order-detail-subtotal">{subtotal} ج.م</div>
-                </div>
-            </div>
-        </div>
-        ''', unsafe_allow_html=True)
+        # Use Streamlit columns for table-like display
+        order_cols = st.columns([3, 1.5, 1.2, 1.2])
+        with order_cols[0]:
+            st.markdown(f'<div class="product-name-cell">{product_name}</div>', unsafe_allow_html=True)
+        with order_cols[1]:
+            st.markdown(f'<div class="origin-cell">{qty} قطعة</div>', unsafe_allow_html=True)
+        with order_cols[2]:
+            st.markdown(f'<div class="price-cell">{price} ج.م</div>', unsafe_allow_html=True)
+        with order_cols[3]:
+            st.markdown(f'<div class="subtotal-cell">{subtotal} ج.م</div>', unsafe_allow_html=True)
 
 def navigate_to_page(new_page):
     """Navigate to a new page"""
