@@ -5,7 +5,7 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 from google.oauth2.service_account import Credentials
 import urllib.parse
 
-# Page config for mobile
+# Page config for mobilee
 st.set_page_config(page_title="المهندس لقطع غيار السيارات", layout="wide")
 
 st.markdown(
